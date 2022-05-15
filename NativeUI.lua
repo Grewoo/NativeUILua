@@ -2731,7 +2731,15 @@ function UIMenu:RemoveItemAt(Index)
             end
             table.remove(self.Items, tonumber(Index))
             self:RecalculateDescriptionPosition()
-            self:CurrentSelection(SelectedItem)
+            --------------------------
+            self:RefreshIndex()
+            if Index == #self.Items+1 then
+                SelectedItem = SelectedItem-1
+            end
+            if #self.Items > 1 then
+                self:CurrentSelection(SelectedItem-1)
+            end
+            ------------------------
         end
     end
 end
@@ -2917,7 +2925,7 @@ function UIMenu:ProcessControl()
     end
 
     if not self.LeftPressed then
-        if self.Controls.Left.Enabled and (IsDisabledControlPressed(0, 174) or IsDisabledControlPressed(1, 174) or IsDisabledControlPressed(2, 174)) then
+        if self.Controls.Left.Enabled and (IsDisabledControlJustPressed(0, 174) or IsDisabledControlJustPressed(1, 174) or IsDisabledControlJustPressed(2, 174)) then
             Citizen.CreateThread(function()
                 self.LeftPressed = true
                 self:GoLeft()
@@ -2932,7 +2940,7 @@ function UIMenu:ProcessControl()
     end
 
     if not self.RightPressed then
-        if self.Controls.Right.Enabled and (IsDisabledControlPressed(0, 175) or IsDisabledControlPressed(1, 175) or IsDisabledControlPressed(2, 175)) then
+        if self.Controls.Right.Enabled and (IsDisabledControlJustPressed(0, 175) or IsDisabledControlJustPressed(1, 175) or IsDisabledControlJustPressed(2, 175)) then
             Citizen.CreateThread(function()
                 self.RightPressed = true
                 self:GoRight()
@@ -3627,9 +3635,12 @@ function MenuPool:Add(Menu)
 end
 
 function MenuPool:Clear()
+    self.Menus = {}
+    --[[
 	self = {
 		Menus = {}
-	 }
+	}
+    --]]
 end
 
 function MenuPool:Remove()
