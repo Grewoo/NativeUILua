@@ -29,7 +29,4 @@ client_scripts {
 --All items packed
 --]]
 
-client_scripts {
-    "NativeUI.lua",
-    "MenuExample.lua"
-}
+client_script "NativeUI.lua"
